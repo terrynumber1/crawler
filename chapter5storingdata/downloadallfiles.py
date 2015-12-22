@@ -7,18 +7,27 @@ downloadDirectory = 'downloaded'
 baseUrl = 'http://pythonscraping.com'
 
 def getAbsoluteURL(baseUrl, source):
+    print('baseUrl: ' + baseUrl)
+    print('source: ' + source)
+
     if source.startswith('http://www.'):
         url = 'http://'+source[11:]
+        print('condition 1: ' + url)
     elif source.startswith('http://'):
         url = source
+        print('condition 2: ' + url)
     elif source.startswith('www.'):
         url = source[4:]
         url = 'http://'+source
+        print('condtion 3: ' + url)
     else:
         url = baseUrl+'/'+source
+        print('condition 4: ' + url)
     if baseUrl not in url:
         return None
-    returl url
+
+    print('Exiting function: ' + url)
+    return url
 
 def getDownloadPath(baseUrl, absoluteUrl, downloadDirectory):
     path = absoluteUrl.replace('www', '')
@@ -26,5 +35,18 @@ def getDownloadPath(baseUrl, absoluteUrl, downloadDirectory):
     path = downloadDirectory+path
     directory = os.path.dirname(path)
 
-    # at page 73
-    # if not os.path
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    return path
+
+html = urlopen('http://www.pythonscraping.com')
+soup1 = BeautifulSoup(html, 'html.parser')
+downloadList = soup1.findAll(src=True)
+
+for download in downloadList:
+    fileUrl = getAbsoluteURL(baseUrl, download['src'])
+    if fileUrl is not None:
+        print(fileUrl)
+
+urlretrieve(fileUrl, getDownloadPath(baseUrl, fileUrl, downloadDirectory))
