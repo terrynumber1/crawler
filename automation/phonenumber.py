@@ -8,3 +8,6 @@ mo2 = regex2.search('Batman and Tina Fey 123-456-7890 12-34-56')
 
 print(mo1.group())
 print(mo2.group())
+
+Garrison Mission Manager
+Master Plan
